@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { RiKakaoTalkFill } from 'react-icons/ri';
 
@@ -12,7 +12,64 @@ const DUMMY_ARTISTS = [
   { id: "5", name: "DJ Epsilon (KR)" },
 ];
 
-export default function ContactPage() {
+interface InputFieldProps {
+  label: string;
+  name: string;
+  type?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+  placeholder?: string;
+}
+
+const InputField: React.FC<InputFieldProps> = ({ label, name, type = 'text', value, onChange, required = false, placeholder = '' }) => (
+  <div className="mb-4">
+    <label htmlFor={name} className="block text-sm font-medium text-white/80 mb-1">
+      {label}{required && <span className="text-point-purple ml-1">*</span>}
+    </label>
+    <input
+      type={type}
+      id={name}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      placeholder={placeholder}
+      className="w-full px-3 py-2 bg-black border border-white/30 rounded-md focus:ring-point-purple focus:border-point-purple text-white text-base placeholder:text-white/30 placeholder:text-xs placeholder:italic"
+    />
+  </div>
+);
+
+interface TextAreaFieldProps {
+  label: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  required?: boolean;
+  placeholder?: string;
+  rows?: number;
+}
+
+const TextAreaField: React.FC<TextAreaFieldProps> = ({ label, name, value, onChange, required = false, placeholder = '', rows = 4 }) => (
+   <div className="mb-4">
+    <label htmlFor={name} className="block text-sm font-medium text-white/80 mb-1">
+      {label}{required && <span className="text-point-purple ml-1">*</span>}
+    </label>
+    <textarea
+      id={name}
+      name={name}
+      value={value}
+      onChange={onChange}
+      required={required}
+      placeholder={placeholder}
+      rows={rows}
+      className="w-full px-3 py-2 bg-black border border-white/30 rounded-md focus:ring-point-purple focus:border-point-purple text-white text-base placeholder:text-white/30 placeholder:text-xs placeholder:italic"
+    />
+  </div>
+);
+
+// Component that uses useSearchParams
+function ContactFormContent() {
   const searchParams = useSearchParams();
   const artistId = searchParams.get('artist');
 
@@ -33,6 +90,8 @@ export default function ContactPage() {
     if (artistId) {
       const artist = DUMMY_ARTISTS.find(a => a.id === artistId);
       setTargetArtistName(artist ? artist.name : '알 수 없는 아티스트');
+    } else {
+      setTargetArtistName(null); // Reset if no artistId
     }
   }, [artistId]);
 
@@ -91,66 +150,8 @@ export default function ContactPage() {
     setIsSubmitting(false);
   };
 
-  interface InputFieldProps {
-    label: string;
-    name: string;
-    type?: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    required?: boolean;
-    placeholder?: string;
-  }
-
-  const InputField: React.FC<InputFieldProps> = ({ label, name, type = 'text', value, onChange, required = false, placeholder = '' }) => (
-    <div className="mb-4">
-      <label htmlFor={name} className="block text-sm font-medium text-white/80 mb-1">
-        {label}{required && <span className="text-point-purple ml-1">*</span>}
-      </label>
-      <input
-        type={type}
-        id={name}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-        placeholder={placeholder}
-        className="w-full px-3 py-2 bg-black border border-white/30 rounded-md focus:ring-point-purple focus:border-point-purple text-white text-base placeholder:text-white/30 placeholder:text-xs placeholder:italic"
-      />
-    </div>
-  );
-
-  interface TextAreaFieldProps {
-    label: string;
-    name: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-    required?: boolean;
-    placeholder?: string;
-    rows?: number;
-  }
-
-  const TextAreaField: React.FC<TextAreaFieldProps> = ({ label, name, value, onChange, required = false, placeholder = '', rows = 4 }) => (
-     <div className="mb-4">
-      <label htmlFor={name} className="block text-sm font-medium text-white/80 mb-1">
-        {label}{required && <span className="text-point-purple ml-1">*</span>}
-      </label>
-      <textarea
-        id={name}
-        name={name}
-        value={value}
-        onChange={onChange}
-        required={required}
-        placeholder={placeholder}
-        rows={rows}
-        className="w-full px-3 py-2 bg-black border border-white/30 rounded-md focus:ring-point-purple focus:border-point-purple text-white text-base placeholder:text-white/30 placeholder:text-xs placeholder:italic"
-      />
-    </div>
-  );
-
   return (
-    <div className="w-full flex flex-col items-center px-4">
-      <h1 className="text-3xl font-bold text-white mt-6 mb-6 text-center">문의하기</h1>
-
+    <form onSubmit={handleSubmit} className="w-full max-w-md">
       {targetArtistName && (
         <div className="mb-6 p-3 bg-point-purple/20 border border-point-purple rounded-md text-center">
           <p className="text-sm text-white/80">문의 아티스트:</p>
@@ -158,49 +159,55 @@ export default function ContactPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="w-full max-w-md">
-        <InputField label="이름" name="name" value={formData.name} onChange={handleChange} required placeholder="담당자 성함"/>
-        <InputField label="이메일" name="email" type="email" value={formData.email} onChange={handleChange} required placeholder="example@company.com"/>
-        <InputField label="연락처" name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="010-1234-5678 (선택 사항)"/>
-        <InputField label="회사/단체명" name="company" value={formData.company} onChange={handleChange} placeholder="(선택 사항)"/>
-        <InputField label="행사 종류" name="eventType" value={formData.eventType} onChange={handleChange} required placeholder="예: 페스티벌, 기업 행사, 클럽 파티"/>
-        <InputField label="희망 날짜/기간" name="eventDate" value={formData.eventDate} onChange={handleChange} required placeholder="예: 2024년 10월 중순, 2024-12-24"/>
-        <TextAreaField label="문의 내용" name="message" value={formData.message} onChange={handleChange} required placeholder="행사 상세 내용, 예산, 장소, 요구사항 등을 기재해주세요."/>
+      <InputField label="이름" name="name" value={formData.name} onChange={handleChange} required placeholder="담당자 성함"/>
+      <InputField label="이메일" name="email" type="email" value={formData.email} onChange={handleChange} required placeholder="example@company.com"/>
+      <InputField label="연락처" name="phone" type="tel" value={formData.phone} onChange={handleChange} placeholder="010-1234-5678 (선택 사항)"/>
+      <InputField label="회사/단체명" name="company" value={formData.company} onChange={handleChange} placeholder="(선택 사항)"/>
+      <InputField label="행사 종류" name="eventType" value={formData.eventType} onChange={handleChange} required placeholder="예: 페스티벌, 기업 행사, 클럽 파티"/>
+      <InputField label="희망 날짜/기간" name="eventDate" value={formData.eventDate} onChange={handleChange} required placeholder="예: 2024년 10월 중순, 2024-12-24"/>
+      <TextAreaField label="문의 내용" name="message" value={formData.message} onChange={handleChange} required placeholder="행사 상세 내용, 예산, 장소, 요구사항 등을 기재해주세요."/>
 
-        {submitMessage && (
-          <p className={`text-sm mb-4 ${submitMessage.startsWith('오류') ? 'text-red-500' : 'text-green-500'}`}>
-            {submitMessage}
-          </p>
-        )}
+      {submitMessage && (
+        <p className={`text-sm mb-4 ${submitMessage.startsWith('오류') ? 'text-red-500' : 'text-green-500'}`}>
+          {submitMessage}
+        </p>
+      )}
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`w-full px-6 py-3 rounded-full bg-point-purple text-white text-lg font-bold shadow-lg 
-                     hover:bg-white hover:text-point-purple transition-colors duration-200
-                     disabled:opacity-50 disabled:cursor-not-allowed`}
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className={`w-full px-6 py-3 rounded-full bg-point-purple text-white text-lg font-bold shadow-lg 
+                   hover:bg-white hover:text-point-purple transition-colors duration-200
+                   disabled:opacity-50 disabled:cursor-not-allowed`}
+      >
+        {isSubmitting ? '제출 중...' : '문의 제출'}
+      </button>
+
+      {/* KakaoTalk Button */}
+      <div className="mt-4 text-center">
+         <a
+          href="YOUR_KAKAO_CHANNEL_LINK" // Replace with your actual KakaoTalk channel link
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#FEE500] text-black text-lg font-bold shadow-lg 
+                     hover:bg-yellow-400 transition-colors duration-200 w-full gap-2" // Added gap-2 and ensured items-center
         >
-          {isSubmitting ? '제출 중...' : '문의 제출'}
-        </button>
+          <RiKakaoTalkFill size={24} />
+          카카오톡으로 문의하기
+        </a>
+       </div>
+    </form>
+  );
+}
 
-        {/* KakaoTalk Button */}
-        <div className="mt-4 text-center">
-           <a
-            href="YOUR_KAKAO_CHANNEL_LINK" // Replace with your actual KakaoTalk channel link
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#FEE500] text-black text-lg font-bold shadow-lg 
-                       hover:bg-yellow-400 transition-colors duration-200 w-full gap-2" // Added gap-2 and ensured items-center
-          >
-            <RiKakaoTalkFill size={24} />
-            카카오톡으로 문의하기
-          </a>
-         </div>
-      </form>
-
+// Main page component wrapping the content with Suspense
+export default function ContactPage() {
+  return (
+    <div className="w-full flex flex-col items-center px-4">
+      <h1 className="text-3xl font-bold text-white mt-6 mb-6 text-center">문의하기</h1>
+      <Suspense fallback={<div className='text-white/70 text-center py-10'>폼 로딩 중...</div>}>\n        <ContactFormContent />\n      </Suspense>\n
       {/* 하단 여백 추가 */}
       <div className="h-48" />
-
     </div>
   );
 } 
