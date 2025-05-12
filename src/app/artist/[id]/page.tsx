@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { useParams, notFound, useRouter } from "next/navigation";
-import { FaTwitter, FaInstagram, FaYoutube, FaSoundcloud, FaSpotify, FaApple } from "react-icons/fa";
+import { FaTwitter, FaInstagram, FaYoutube, FaSoundcloud, FaSpotify } from "react-icons/fa";
 import { SiApplemusic } from "react-icons/si";
 
 // 메인 페이지의 더미 데이터 임시로 가져오기 (추후 데이터 로딩 로직 개선)
@@ -76,11 +76,6 @@ export default function ArtistDetailPage() {
   if (!artist) {
     notFound(); // 아티스트 없으면 404 페이지 표시
   }
-
-  const handleContactClick = () => {
-    // 특정 아티스트 선택 상태로 문의 페이지 이동 (선택 사항)
-    router.push(`/contact?artist=${artistId}`);
-  };
 
   return (
     <div className="w-full flex flex-col items-center pb-16 px-4">

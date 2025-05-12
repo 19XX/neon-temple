@@ -17,7 +17,7 @@ const cardVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
-const ArtistCard: React.FC<ArtistCardProps> = ({ id, name, genres, bio, profileImage, onClick }) => {
+const ArtistCard: React.FC<ArtistCardProps> = ({ /* id, */ name, genres, bio, profileImage, onClick }) => {
   return (
     <motion.div
       variants={cardVariants}

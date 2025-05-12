@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { RiKakaoTalkFill } from 'react-icons/ri';
 
 // 임시 아티스트 데이터 (ID로 이름 찾기 용도)
@@ -14,7 +14,6 @@ const DUMMY_ARTISTS = [
 
 export default function ContactPage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const artistId = searchParams.get('artist');
 
   const [formData, setFormData] = useState({

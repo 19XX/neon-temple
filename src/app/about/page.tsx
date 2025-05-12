@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+// import Link from 'next/link'; // Removed unused import
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa'; // 예시 SNS 아이콘
 import { RiKakaoTalkFill } from 'react-icons/ri'; // Import KakaoTalk icon
 

@@ -4,8 +4,6 @@ import Link from "next/link";
 
 // 헤더의 대략적인 높이
 const HEADER_HEIGHT = "h-24"; // 6rem = 96px
-// 푸터 높이
-const FOOTER_HEIGHT = "h-16"; // 4rem = 64px
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -36,8 +34,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      {/* 스크롤되는 본문 영역 (동적 뷰포트 높이 사용) */}
-      <main className="h-[calc(100dvh_-_6rem_-_4rem)] overflow-y-auto">
+      {/* 스크롤되는 본문 영역 (동적 뷰포트 높이 사용, 푸터 높이 고려 제거) */}
+      <main className="h-[calc(100dvh_-_6rem)] overflow-y-auto">
         <div className="w-full max-w-md mx-auto px-4">
           {/* 상단 여백 추가 */}
           <div className="h-8"></div>
