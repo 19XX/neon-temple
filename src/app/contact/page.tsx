@@ -205,7 +205,10 @@ export default function ContactPage() {
   return (
     <div className="w-full flex flex-col items-center px-4">
       <h1 className="text-3xl font-bold text-white mt-6 mb-6 text-center">문의하기</h1>
-      <Suspense fallback={<div className='text-white/70 text-center py-10'>폼 로딩 중...</div>}>\n        <ContactFormContent />\n      </Suspense>\n
+      <Suspense fallback={<div className='text-white/70 text-center py-10'>폼 로딩 중...</div>}>
+        <ContactFormContent />
+      </Suspense>
+
       {/* 하단 여백 추가 */}
       <div className="h-48" />
     </div>
