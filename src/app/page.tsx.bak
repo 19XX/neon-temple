@@ -50,15 +50,6 @@ const DUMMY_ARTISTS: ArtistData[] = [
     country: "KR",
     type: "DJ",
   },
-  {
-    id: "6",
-    name: "Rapper Charlie (KR)",
-    genres: ["K-Hip-Hop", "Boom Bap"],
-    bio: "날카로운 랩 스킬과 독특한 음색으로 떠오르는 신예 한국 여자 래퍼.",
-    profileImage: "/assets/images/rapper2.png",
-    country: "KR",
-    type: "RAPPER",
-  },
 ];
 
 export default function HomePage() {
