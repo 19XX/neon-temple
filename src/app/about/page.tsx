@@ -10,11 +10,11 @@ export default function AboutPage() {
       {/* 회사 소개 섹션 */}
       <section className="w-full max-w-md mb-12 text-center">
         <Image
-          src="/assets/images/character.gif" // 대표 이미지 (임시)
-          alt="Neon Temple Character"
-          width={120}
-          height={120}
-          className="mx-auto mb-6 rounded-full bg-point-purple/20 p-2"
+          src="/assets/images/taichi_logo_alpha_640.png" // 대표 이미지 변경
+          alt="Neon Temple Logo" // alt 텍스트 업데이트
+          width={84} // 크기 70%로 조정 (120 * 0.7 = 84)
+          height={84} // 크기 70%로 조정 (120 * 0.7 = 84)
+          className="mx-auto mb-6 rounded-full bg-point-purple/20 p-2 animate-spin-slow" // animate-spin-slow로 변경
         />
         <h2 className="text-2xl font-semibold text-point-purple mb-4">네온템플에 오신 것을 환영합니다!</h2>
         <p className="text-base text-white/80 leading-relaxed mb-4">
