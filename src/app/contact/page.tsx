@@ -186,7 +186,7 @@ function ContactFormContent() {
       {/* KakaoTalk Button */}
       <div className="mt-4 text-center">
          <a
-          href="YOUR_KAKAO_CHANNEL_LINK" // Replace with your actual KakaoTalk channel link
+          href="http://pf.kakao.com/_axhyBn/chat" // 카카오톡 채널 채팅 URL로 변경
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-[#FEE500] text-black text-lg font-bold shadow-lg 
